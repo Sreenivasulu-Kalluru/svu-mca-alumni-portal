@@ -178,7 +178,7 @@ export default function CreateStoryPage() {
                   onChange={handleChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                  className="w-full px-4 py-2 bg-white border border-gray-300 rounded-lg text-gray-900 focus:ring-2 focus:ring-blue-500 outline-none"
                   placeholder="Tell us about your journey, challenges, and advice for students..."
                 />
               </div>
