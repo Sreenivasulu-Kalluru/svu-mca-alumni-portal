@@ -101,12 +101,17 @@ export default function ProfilePage() {
 
   const handleDeleteAccount = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/users/profile', {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      });
+      const res = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+        }/api/users/profile`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
+      );
 
       if (res.ok) {
         logout();
@@ -133,17 +138,22 @@ export default function ProfilePage() {
         .map((s) => s.trim())
         .filter(Boolean);
 
-      const res = await fetch('http://localhost:5000/api/users/profile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user?.token}`,
-        },
-        body: JSON.stringify({
-          ...formData,
-          skills: skillsArray,
-        }),
-      });
+      const res = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+        }/api/users/profile`,
+        {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user?.token}`,
+          },
+          body: JSON.stringify({
+            ...formData,
+            skills: skillsArray,
+          }),
+        }
+      );
 
       const data = await res.json();
 
@@ -191,7 +201,10 @@ export default function ProfilePage() {
                     {user.profilePicture ? (
                       <div className="relative w-full h-full">
                         <Image
-                          src={`http://localhost:5000${user.profilePicture}`}
+                          src={`${
+                            process.env.NEXT_PUBLIC_API_URL ||
+                            'http://localhost:5000'
+                          }${user.profilePicture}`}
                           alt={user.name}
                           fill
                           className="object-cover"

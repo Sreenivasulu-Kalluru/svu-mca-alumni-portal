@@ -14,7 +14,7 @@ interface PostProps {
     _id: string;
     content: string;
     image?: string;
-    author: {
+    author?: {
       _id: string;
       name: string;
       role: string;
@@ -82,8 +82,10 @@ export function PostCard({ post, onDelete }: PostProps) {
     });
   };
 
-  const profileImageUrl = getImageUrl(post.author.profilePicture);
+  const profileImageUrl = getImageUrl(post.author?.profilePicture);
   const postImageUrl = getImageUrl(post.image);
+  const authorName = post.author?.name || 'Unknown User';
+  const authorRole = post.author?.role || 'Alumni';
 
   return (
     <motion.div
@@ -99,24 +101,24 @@ export function PostCard({ post, onDelete }: PostProps) {
             {profileImageUrl ? (
               <Image
                 src={profileImageUrl}
-                alt={post.author.name}
+                alt={authorName}
                 fill
                 className="object-cover"
                 unoptimized
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-blue-600 font-bold text-sm">
-                {(post.author.name || 'U').charAt(0).toUpperCase()}
+                {authorName.charAt(0).toUpperCase()}
               </div>
             )}
           </div>
           <div>
             <h4 className="font-bold text-gray-900 leading-tight">
-              {post.author.name}
+              {authorName}
             </h4>
             <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5">
               <span className="capitalize px-1.5 py-0.5 bg-gray-100 rounded text-gray-600 font-medium">
-                {post.author.role}
+                {authorRole}
               </span>
               <span>•</span>
               <span>{formatDate(post.createdAt)}</span>
@@ -124,7 +126,7 @@ export function PostCard({ post, onDelete }: PostProps) {
           </div>
         </div>
 
-        {user?._id === post.author._id && (
+        {user?._id === post.author?._id && (
           <button
             onClick={() => onDelete(post._id)}
             className="text-gray-400 hover:text-red-500 transition p-1 rounded-full hover:bg-red-50"
@@ -161,7 +163,7 @@ export function PostCard({ post, onDelete }: PostProps) {
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
             imageUrl={postImageUrl}
-            alt={`Image by ${post.author.name}`}
+            alt={`Image by ${authorName}`}
           />
         </>
       )}
