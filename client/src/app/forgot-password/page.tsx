@@ -35,7 +35,7 @@ export default function ForgotPasswordPage() {
       if (res.ok) {
         setMessage('Email sent! Please check your inbox for the reset link.');
       } else {
-        setError(data.message || 'Something went wrong');
+        setError(data.error || data.message || 'Something went wrong');
       }
     } catch {
       setError('Failed to send email. Please try again later.');
