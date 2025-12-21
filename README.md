@@ -2,8 +2,6 @@
 
 The official digital platform for **Sri Venkateswara University MCA Department**, designed to bridge the gap between alumni and current students. This full-stack application facilitates mentorship, job opportunities, event management, and real-time networking.
 
-![Project Preview](/client/public/icon.png)
-
 ## 🚀 Tech Stack
 
 ### Frontend (Client)
