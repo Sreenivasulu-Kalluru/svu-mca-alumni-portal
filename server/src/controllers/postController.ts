@@ -29,7 +29,7 @@ export const createPost = async (
     let image = '';
 
     if (req.file) {
-      image = `/uploads/${req.file.filename}`;
+      image = req.file.path;
     }
 
     if (!content && !image) {

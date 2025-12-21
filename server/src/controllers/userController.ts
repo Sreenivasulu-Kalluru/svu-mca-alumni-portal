@@ -137,8 +137,7 @@ export const uploadProfilePicture = async (
 
     if (user) {
       // Use path.basename to get just the filename and prevent backslash issues
-      const filename = path.basename(req.file.path);
-      user.profilePicture = `/uploads/${filename}`;
+      user.profilePicture = req.file.path;
       const updatedUser = await user.save();
 
       res.json({

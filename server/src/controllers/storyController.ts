@@ -29,7 +29,7 @@ export const createStory = async (req: AuthRequest, res: Response) => {
       role,
       company,
       content,
-      image: (req as any).file ? `/uploads/${(req as any).file.filename}` : image,
+      image: (req as any).file ? (req as any).file.path : image,
       linkedinProfile,
       status: 'approved', // Explicitly auto-approve
     });
