@@ -16,6 +16,7 @@ const createTransporter = async () => {
     // Use real credentials (Gmail or other SMTP) with connection pooling
     transporter = nodemailer.createTransport({
       service: 'gmail',
+      family: 4, // Force IPv4
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
