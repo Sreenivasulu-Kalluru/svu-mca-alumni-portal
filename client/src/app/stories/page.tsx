@@ -82,7 +82,7 @@ export default function StoriesPage() {
 
         {loading ? (
           <div className="text-center py-20">Loading stories...</div>
-        ) : (
+        ) : stories.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {stories.map((story, index) => (
               <motion.div
@@ -142,6 +142,25 @@ export default function StoriesPage() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        ) : (
+          <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-gray-200">
+            <div className="w-16 h-16 bg-blue-50 text-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Quote className="w-8 h-8" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              No stories yet
+            </h3>
+            <p className="text-gray-500 max-w-md mx-auto mb-6">
+              Be the first to share your journey and inspire the next generation
+              of students!
+            </p>
+            <Link
+              href="/stories/create"
+              className="inline-flex items-center justify-center px-6 py-2.5 bg-blue-900 text-white rounded-lg font-medium hover:bg-blue-800 transition"
+            >
+              Share Your Story
+            </Link>
           </div>
         )}
       </main>

@@ -31,6 +31,7 @@ export const createStory = async (req: AuthRequest, res: Response) => {
       content,
       image: req.file ? `/uploads/${req.file.filename}` : image,
       linkedinProfile,
+      status: 'approved', // Explicitly auto-approve
     });
 
     res.status(201).json(story);
