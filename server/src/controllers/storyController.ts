@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import SuccessStory from '../models/SuccessStory';
-import { AuthRequest } from '../middleware/authMiddleware';
+import SuccessStory from '../models/SuccessStory.js';
+import { AuthRequest } from '../middleware/authMiddleware.js';
 
 // @desc    Get all approved stories
 // @route   GET /api/stories

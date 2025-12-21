@@ -7,6 +7,10 @@ interface JwtPayload {
   role: string;
 }
 
+export interface AuthRequest extends Request {
+  user?: any; // Replace 'any' with IUser interface if available and imported
+}
+
 export const protect = async (
   req: Request,
   res: Response,
