@@ -15,12 +15,16 @@ const createTransporter = async () => {
   if (process.env.EMAIL_USERNAME && process.env.EMAIL_PASSWORD) {
     // Use real credentials (Gmail or other SMTP) with connection pooling
     transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for 465, false for 587
       family: 4, // Force IPv4
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
       },
+      logger: true,
+      debug: true, // Show detailed logs
     } as any);
   } else {
     // Development: Create a test account automatically (Ethereal)
