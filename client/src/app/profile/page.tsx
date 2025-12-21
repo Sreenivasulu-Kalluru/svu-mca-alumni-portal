@@ -272,7 +272,7 @@ export default function ProfilePage() {
                   onSubmit={handleSubmit}
                   className="space-y-6"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex flex-col md:grid md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-1.5">
                         Full Name
@@ -407,7 +407,7 @@ export default function ProfilePage() {
                   className="space-y-8"
                 >
                   {/* Info Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="flex flex-col md:grid md:grid-cols-2 gap-8">
                     <div className="space-y-4">
                       <h3 className="text-lg font-bold text-gray-900 border-b pb-2">
                         Professional Info
