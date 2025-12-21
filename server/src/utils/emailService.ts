@@ -6,15 +6,19 @@ interface EmailOptions {
   message: string;
 }
 
-const sendEmail = async (options: EmailOptions): Promise<void> => {
-  // Create a transporter using Ethereal Email (for development)
-  // In production, use SendGrid, Mailgun, or verified Gmail
-  let transporter;
+// Create transporter outside the function to reuse connection pool
+let transporter: nodemailer.Transporter;
+
+const createTransporter = async () => {
+  if (transporter) return transporter;
 
   if (process.env.EMAIL_USERNAME && process.env.EMAIL_PASSWORD) {
-    // Use real credentials if provided (Gmail or other SMTP)
+    // Use real credentials (Gmail or other SMTP) with connection pooling
     transporter = nodemailer.createTransport({
       service: 'Gmail',
+      pool: true, // Use pooled connections for better performance
+      maxConnections: 5,
+      maxMessages: 100,
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
@@ -27,23 +31,27 @@ const sendEmail = async (options: EmailOptions): Promise<void> => {
     transporter = nodemailer.createTransport({
       host: 'smtp.ethereal.email',
       port: 587,
-      secure: false, // true for 465, false for other ports
+      secure: false,
       auth: {
-        user: testAccount.user, // generated ethereal user
-        pass: testAccount.pass, // generated ethereal password
+        user: testAccount.user,
+        pass: testAccount.pass,
       },
     });
   }
+  return transporter;
+};
+
+const sendEmail = async (options: EmailOptions): Promise<void> => {
+  const mailTransporter = await createTransporter();
 
   const mailOptions = {
     from: '"SVU Alumni Portal" <noreply@svualumni.com>',
     to: options.email,
     subject: options.subject,
     text: options.message,
-    // html: options.html // Optional: Add HTML support later
   };
 
-  const info = await transporter.sendMail(mailOptions);
+  const info = await mailTransporter.sendMail(mailOptions);
 
   console.log('--------------------------------------------------');
   if (process.env.EMAIL_USERNAME) {
