@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useSocket } from '@/context/SocketContext';
 import ChatList from '@/components/chat/ChatList';
@@ -9,7 +9,7 @@ import { IConversation, IMessage, IUser } from '@/types/chat';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 
-export default function ChatPage() {
+function ChatContent() {
   const { user } = useAuth();
   const { socket } = useSocket();
   const searchParams = useSearchParams();
@@ -66,7 +66,9 @@ export default function ChatPage() {
       const fetchUserAndInit = async () => {
         try {
           const res = await fetch(
-            `http://localhost:5000/api/users/${userIdToChat}`
+            `${
+              process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+            }/api/users/${userIdToChat}`
           );
           if (!res.ok) return;
           const otherUser = await res.json();
@@ -229,8 +231,8 @@ export default function ChatPage() {
       const token = user.token || localStorage.getItem('token');
       const res = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
-        }/chat`,
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+        }/api/chat`,
         {
           method: 'POST',
           headers: {
@@ -248,7 +250,9 @@ export default function ChatPage() {
       // If was new, we now have a real conversation
       if (selectedConversationId === 'new') {
         const resConv = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/chat`,
+          `${
+            process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+          }/api/chat`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -290,8 +294,8 @@ export default function ChatPage() {
       const token = user.token || localStorage.getItem('token');
       const res = await fetch(
         `${
-          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'
-        }/chat/${messageId}`,
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+        }/api/chat/${messageId}`,
         {
           method: 'PUT',
           headers: {
@@ -368,5 +372,13 @@ export default function ChatPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<div className="p-4">Loading chat...</div>}>
+      <ChatContent />
+    </Suspense>
   );
 }
