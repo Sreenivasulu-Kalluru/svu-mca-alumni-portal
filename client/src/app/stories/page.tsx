@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import Header from '@/components/Header';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Quote } from 'lucide-react';
 import { motion } from 'framer-motion';
+import UserAvatar from '@/components/UserAvatar';
 
 interface IStory {
   _id: string;
@@ -55,7 +55,7 @@ export default function StoriesPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl font-bold text-gray-900 mb-4"
           >
-            Alumni Success Stories
+            Success Stories
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -94,21 +94,12 @@ export default function StoriesPage() {
               >
                 <div className="p-8">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 shrink-0">
-                      {story.image ? (
-                        <Image
-                          src={`http://localhost:5000${story.image}`}
-                          alt={story.name}
-                          width={64}
-                          height={64}
-                          className="w-full h-full object-cover"
-                          unoptimized
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-blue-100 text-blue-900 font-bold text-xl">
-                          {story.name.charAt(0)}
-                        </div>
-                      )}
+                    <div className="w-16 h-16 shrink-0">
+                      <UserAvatar
+                        user={{ name: story.name, profilePicture: story.image }}
+                        className="w-16 h-16"
+                        size={64}
+                      />
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-900">
