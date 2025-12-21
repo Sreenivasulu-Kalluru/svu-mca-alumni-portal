@@ -226,16 +226,16 @@ export const forgotPassword = async (
 
       await user.save();
 
-      res
-        .status(500)
-        .json({
-          message: 'Email could not be sent',
-          error: (error as any).message,
-        });
+      res.status(500).json({
+        message: 'Email could not be sent',
+        error: (error as any).message,
+      });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    res
+      .status(500)
+      .json({ message: 'Server Error', error: (error as any).message });
   }
 };
 
