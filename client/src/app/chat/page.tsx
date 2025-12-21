@@ -34,7 +34,9 @@ function ChatContent() {
       try {
         const token = user.token || localStorage.getItem('token');
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/chat`,
+          `${
+            process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+          }/api/chat`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -332,6 +334,14 @@ function ChatContent() {
       ? pendingConversation
       : conversations.find((c) => c._id === selectedConversationId);
 
+  const handleSelectConversation = (id: string) => {
+    setSelectedConversationId(id);
+    // Clear the URL parameter so it doesn't force us back to that user
+    if (userIdToChat) {
+      router.replace('/chat');
+    }
+  };
+
   return (
     <div className="flex flex-col h-screen">
       <Header />
@@ -345,7 +355,7 @@ function ChatContent() {
           <ChatList
             conversations={conversations}
             selectedConversationId={selectedConversationId}
-            onSelectConversation={setSelectedConversationId}
+            onSelectConversation={handleSelectConversation}
           />
         </div>
 
