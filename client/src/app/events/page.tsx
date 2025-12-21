@@ -94,12 +94,19 @@ export default function EventsPage() {
 
         {/* Filters */}
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row gap-4 justify-between items-center">
-          <div className="flex bg-gray-100 p-1 rounded-lg w-full md:w-auto">
+          <div className="flex bg-gray-100 p-1 rounded-lg w-full md:w-[280px] relative">
+            <div
+              className={`absolute h-[calc(100%-8px)] top-1 rounded-md bg-white shadow-sm transition-all duration-300 ease-in-out ${
+                view === 'upcoming'
+                  ? 'left-1 w-[calc(50%-4px)]'
+                  : 'left-[calc(50%+4px)] w-[calc(50%-8px)]'
+              }`}
+            ></div>
             <button
               onClick={() => setView('upcoming')}
-              className={`flex-1 md:flex-none px-4 py-1.5 text-sm font-medium rounded-md transition text-center ${
+              className={`flex-1 relative z-10 px-4 py-1.5 text-sm font-medium rounded-md transition-colors duration-200 text-center ${
                 view === 'upcoming'
-                  ? 'bg-white shadow-sm text-blue-900'
+                  ? 'text-blue-900'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
@@ -107,9 +114,9 @@ export default function EventsPage() {
             </button>
             <button
               onClick={() => setView('all')}
-              className={`flex-1 md:flex-none px-4 py-1.5 text-sm font-medium rounded-md transition text-center ${
+              className={`flex-1 relative z-10 px-4 py-1.5 text-sm font-medium rounded-md transition-colors duration-200 text-center ${
                 view === 'all'
-                  ? 'bg-white shadow-sm text-blue-900'
+                  ? 'text-blue-900'
                   : 'text-gray-600 hover:text-gray-900'
               }`}
             >
