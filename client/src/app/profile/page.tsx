@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { getImageUrl } from '@/utils/imageHelper';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import { useAuth } from '@/context/AuthContext';
@@ -201,10 +202,7 @@ export default function ProfilePage() {
                     {user.profilePicture ? (
                       <div className="relative w-full h-full">
                         <Image
-                          src={`${
-                            process.env.NEXT_PUBLIC_API_URL ||
-                            'http://localhost:5000'
-                          }${user.profilePicture}`}
+                          src={getImageUrl(user.profilePicture) || ''}
                           alt={user.name}
                           fill
                           className="object-cover"

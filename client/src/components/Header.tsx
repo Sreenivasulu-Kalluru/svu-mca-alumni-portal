@@ -77,10 +77,7 @@ const Header = () => {
                 {user.profilePicture ? (
                   <div className="relative w-8 h-8 rounded-full overflow-hidden border border-blue-200">
                     <Image
-                      src={`${
-                        process.env.NEXT_PUBLIC_API_URL ||
-                        'http://localhost:5000'
-                      }${user.profilePicture}`}
+                      src={getImageUrl(user.profilePicture) || ''}
                       alt={user.name || 'User'}
                       fill
                       className="object-cover"

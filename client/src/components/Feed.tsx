@@ -58,12 +58,17 @@ export default function Feed() {
     if (!confirm('Are you sure you want to delete this post?')) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/api/posts/${id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      });
+      const res = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+        }/api/posts/${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        }
+      );
 
       if (res.ok) {
         setPosts(posts.filter((post) => post._id !== id));
