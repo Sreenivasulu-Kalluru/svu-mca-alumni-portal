@@ -3,8 +3,8 @@ import { IMessage, IConversation } from '@/types/chat';
 import { useAuth } from '@/context/AuthContext';
 import { format } from 'date-fns';
 import { Send, ArrowLeft, Edit2, X, Check } from 'lucide-react';
-import Image from 'next/image';
-import { getImageUrl } from '@/utils/imageHelper';
+// import Image from 'next/image'; // Remove unused
+import UserAvatar from '@/components/UserAvatar';
 
 interface ChatWindowProps {
   conversation: IConversation;
@@ -69,8 +69,6 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
 
   if (!otherParticipant) return <div>Conversation error</div>;
 
-  const imageUrl = getImageUrl(otherParticipant.profilePicture);
-
   return (
     <div className="flex flex-col h-full bg-gray-50">
       {/* Header */}
@@ -81,20 +79,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
         >
           <ArrowLeft size={24} />
         </button>
-        {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={otherParticipant.name}
-            width={40}
-            height={40}
-            className="w-10 h-10 rounded-full object-cover mr-3"
-            unoptimized
-          />
-        ) : (
-          <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold mr-3">
-            {otherParticipant.name.charAt(0).toUpperCase()}
-          </div>
-        )}
+        <UserAvatar
+          user={otherParticipant}
+          className="w-10 h-10 mr-3"
+          size={40}
+        />
         <div>
           <h3 className="font-semibold text-gray-900">
             {otherParticipant.name}

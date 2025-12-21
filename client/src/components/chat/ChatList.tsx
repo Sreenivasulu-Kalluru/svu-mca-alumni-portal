@@ -3,8 +3,8 @@
 import { IConversation } from '@/types/chat';
 import { useAuth } from '@/context/AuthContext';
 import { formatDistanceToNow } from 'date-fns';
-import Image from 'next/image';
-import { getImageUrl } from '@/utils/imageHelper';
+// import Image from 'next/image'; // Remove unused
+import UserAvatar from '@/components/UserAvatar';
 
 interface ChatListProps {
   conversations: IConversation[];
@@ -37,8 +37,6 @@ const ChatList: React.FC<ChatListProps> = ({
 
             if (!otherParticipant) return null;
 
-            const imageUrl = getImageUrl(otherParticipant.profilePicture);
-
             return (
               <div
                 key={conversation._id}
@@ -50,20 +48,11 @@ const ChatList: React.FC<ChatListProps> = ({
                 }`}
               >
                 <div className="relative">
-                  {imageUrl ? (
-                    <Image
-                      src={imageUrl}
-                      alt={otherParticipant.name}
-                      width={48}
-                      height={48}
-                      className="w-12 h-12 rounded-full object-cover"
-                      unoptimized
-                    />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-lg">
-                      {otherParticipant.name.charAt(0).toUpperCase()}
-                    </div>
-                  )}
+                  <UserAvatar
+                    user={otherParticipant}
+                    className="w-12 h-12"
+                    size={48}
+                  />
                 </div>
                 <div className="ml-4 flex-1">
                   <div className="flex justify-between items-baseline">
