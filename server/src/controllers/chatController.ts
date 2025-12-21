@@ -11,7 +11,7 @@ interface AuthRequest extends Request {
 
 export const sendMessage = async (req: AuthRequest, res: Response) => {
   try {
-    const { recipientId, content } = req.body;
+    const { recipientId, content } = (req as any).body;
     const senderId = req.user._id;
 
     if (!recipientId || !content) {
@@ -76,7 +76,7 @@ export const getConversations = async (req: AuthRequest, res: Response) => {
 
 export const getMessages = async (req: AuthRequest, res: Response) => {
   try {
-    const { conversationId } = req.params;
+    const { conversationId } = (req as any).params;
     const messages = await Message.find({ conversationId }).sort({
       createdAt: 1,
     });
@@ -89,8 +89,8 @@ export const getMessages = async (req: AuthRequest, res: Response) => {
 
 export const editMessage = async (req: AuthRequest, res: Response) => {
   try {
-    const { messageId } = req.params;
-    const { content } = req.body;
+    const { messageId } = (req as any).params;
+    const { content } = (req as any).body;
     const userId = req.user._id;
 
     if (!content) {

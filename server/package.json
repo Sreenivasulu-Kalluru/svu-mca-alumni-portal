@@ -22,13 +22,13 @@
     "multer": "^2.0.2",
     "nodemailer": "^7.0.11",
     "socket.io": "^4.8.1",
-    "zod": "^4.2.1"
-  },
-  "devDependencies": {
+    "zod": "^4.2.1",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/multer": "^2.0.0",
-    "@types/node": "^25.0.3",
+    "@types/node": "^25.0.3"
+  },
+  "devDependencies": {
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
