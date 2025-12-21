@@ -197,6 +197,13 @@ const Header = () => {
             >
               About Department
             </Link>
+            <Link
+              href="/stories"
+              className="text-base font-medium text-gray-700 hover:text-blue-900 py-2 border-b border-gray-50"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Success Stories
+            </Link>
             {!user && (
               <div className="flex flex-col gap-3 pt-2">
                 <Link
