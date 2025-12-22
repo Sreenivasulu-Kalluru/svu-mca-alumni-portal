@@ -21,21 +21,21 @@ const createTransporter = async () => {
       `[EmailService] Configuring Transporter: Host=${host} Port=${port} Secure=${secure} User=${process.env.EMAIL_USERNAME}`
     );
 
-    // Use real credentials (Gmail or other SMTP) with connection pooling
+    // Use 'gmail' service which handles host/port/secure automatically
     transporter = nodemailer.createTransport({
-      host,
-      port,
-      secure, // true for 465, false for other ports
-      family: 4, // Force IPv4
+      service: 'gmail',
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
       },
       tls: {
-        rejectUnauthorized: false, // Fix for some cloud providers
+        rejectUnauthorized: false,
       },
+      connectionTimeout: 20000, // 20 seconds
+      greetingTimeout: 20000,
+      socketTimeout: 20000,
       logger: true,
-      debug: true, // Show detailed logs
+      debug: true,
     } as any);
   } else {
     // Development: Create a test account automatically (Ethereal)
