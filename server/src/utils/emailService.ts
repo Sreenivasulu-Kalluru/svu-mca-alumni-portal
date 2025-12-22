@@ -13,7 +13,7 @@ const createTransporter = async () => {
   if (transporter) return transporter;
 
   if (process.env.EMAIL_USERNAME && process.env.EMAIL_PASSWORD) {
-    const host = process.env.EMAIL_HOST || 'smtp.gmail.com';
+    const host = process.env.EMAIL_HOST || 'smtp-mail.outlook.com';
     const port = parseInt(process.env.EMAIL_PORT || '587');
     const secure = process.env.EMAIL_SECURE === 'true';
 
@@ -21,17 +21,20 @@ const createTransporter = async () => {
       `[EmailService] Configuring Transporter: Host=${host} Port=${port} Secure=${secure} User=${process.env.EMAIL_USERNAME}`
     );
 
-    // Use 'gmail' service which handles host/port/secure automatically
+    // Outlook SMTP configuration
     transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host,
+      port,
+      secure: false, // TLS requires secure: false
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
       },
       tls: {
+        ciphers: 'SSLv3',
         rejectUnauthorized: false,
       },
-      connectionTimeout: 20000, // 20 seconds
+      connectionTimeout: 20000,
       greetingTimeout: 20000,
       socketTimeout: 20000,
       logger: true,
