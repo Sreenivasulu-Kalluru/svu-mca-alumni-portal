@@ -13,15 +13,26 @@ const createTransporter = async () => {
   if (transporter) return transporter;
 
   if (process.env.EMAIL_USERNAME && process.env.EMAIL_PASSWORD) {
+    const host = process.env.EMAIL_HOST || 'smtp.gmail.com';
+    const port = parseInt(process.env.EMAIL_PORT || '587');
+    const secure = process.env.EMAIL_SECURE === 'true';
+
+    console.log(
+      `[EmailService] Configuring Transporter: Host=${host} Port=${port} Secure=${secure} User=${process.env.EMAIL_USERNAME}`
+    );
+
     // Use real credentials (Gmail or other SMTP) with connection pooling
     transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-      port: parseInt(process.env.EMAIL_PORT || '587'),
-      secure: process.env.EMAIL_SECURE === 'true', // true for 465, false for other ports
+      host,
+      port,
+      secure, // true for 465, false for other ports
       family: 4, // Force IPv4
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false, // Fix for some cloud providers
       },
       logger: true,
       debug: true, // Show detailed logs
