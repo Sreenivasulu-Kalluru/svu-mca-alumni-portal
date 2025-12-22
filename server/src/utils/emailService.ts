@@ -13,7 +13,7 @@ const createTransporter = async () => {
   if (transporter) return transporter;
 
   if (process.env.EMAIL_USERNAME && process.env.EMAIL_PASSWORD) {
-    const host = process.env.EMAIL_HOST || 'smtp-mail.outlook.com';
+    const host = process.env.EMAIL_HOST || 'smtp-relay.brevo.com';
     const port = parseInt(process.env.EMAIL_PORT || '587');
     const secure = process.env.EMAIL_SECURE === 'true';
 
@@ -21,17 +21,16 @@ const createTransporter = async () => {
       `[EmailService] Configuring Transporter: Host=${host} Port=${port} Secure=${secure} User=${process.env.EMAIL_USERNAME}`
     );
 
-    // Outlook SMTP configuration
+    // Generic SMTP configuration (works for Brevo, Outlook, etc.)
     transporter = nodemailer.createTransport({
       host,
       port,
-      secure: false, // TLS requires secure: false
+      secure, // true for 465, false for 587
       auth: {
         user: process.env.EMAIL_USERNAME,
         pass: process.env.EMAIL_PASSWORD,
       },
       tls: {
-        ciphers: 'SSLv3',
         rejectUnauthorized: false,
       },
       connectionTimeout: 20000,
