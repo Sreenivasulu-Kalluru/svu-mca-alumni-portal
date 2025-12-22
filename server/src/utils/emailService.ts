@@ -60,7 +60,8 @@ const sendEmail = async (options: EmailOptions): Promise<void> => {
   const mailTransporter = await createTransporter();
 
   const mailOptions = {
-    from: '"SVU Alumni Portal" <noreply@svualumni.com>',
+    from:
+      process.env.EMAIL_FROM || '"SVU Alumni Portal" <noreply@svualumni.com>',
     to: options.email,
     subject: options.subject,
     text: options.message,
