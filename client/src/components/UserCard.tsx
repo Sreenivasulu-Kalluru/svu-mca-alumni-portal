@@ -1,3 +1,4 @@
+import UserAvatar from './UserAvatar';
 import { Github, Linkedin, Mail, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -13,6 +14,7 @@ interface User {
   linkedinProfile?: string;
   githubProfile?: string;
   email: string;
+  profilePicture?: string; // Ensure this is included
 }
 
 export function UserCard({ user }: { user: User }) {
@@ -26,9 +28,7 @@ export function UserCard({ user }: { user: User }) {
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-900 font-bold text-lg">
-            {user.name.charAt(0)}
-          </div>
+          <UserAvatar user={user} className="w-12 h-12" size={48} />
           <div>
             <h3 className="font-bold text-gray-900">{user.name}</h3>
             <span
