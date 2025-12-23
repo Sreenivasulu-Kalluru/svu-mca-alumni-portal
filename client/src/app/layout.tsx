@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/context/AuthContext';
 import { SocketProvider } from '@/context/SocketContext';
 import './globals.css';
+import CookieConsent from '@/components/CookieConsent';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -62,6 +63,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <SocketProvider>{children}</SocketProvider>
+          <CookieConsent />
         </AuthProvider>
       </body>
     </html>
