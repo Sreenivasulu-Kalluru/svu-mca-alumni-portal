@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { Send, ArrowLeft, Edit2, X, Check, Trash2 } from 'lucide-react';
 // import Image from 'next/image'; // Remove unused
 import UserAvatar from '@/components/UserAvatar';
+import ConfirmModal from '../ConfirmModal';
 
 interface ChatWindowProps {
   conversation: IConversation;
@@ -32,6 +33,11 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   const [showOptionsMessageId, setShowOptionsMessageId] = useState<
     string | null
   >(null);
+
+  // Delete Modal State
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const otherParticipant = conversation.participants.find(
@@ -60,10 +66,17 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
     setShowOptionsMessageId(null);
   };
 
-  const handleDeleteClick = async (messageId: string) => {
-    if (confirm('Are you sure you want to delete this message?')) {
-      await onDeleteMessage(messageId);
-      setShowOptionsMessageId(null);
+  const handleDeleteClick = (messageId: string) => {
+    setMessageToDelete(messageId);
+    setDeleteModalOpen(true);
+    setShowOptionsMessageId(null);
+  };
+
+  const confirmDelete = async () => {
+    if (messageToDelete) {
+      await onDeleteMessage(messageToDelete);
+      setMessageToDelete(null);
+      setDeleteModalOpen(false); // Close modal after deletion
     }
   };
 
@@ -257,6 +270,15 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
           </button>
         </div>
       </form>
+      <ConfirmModal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={confirmDelete}
+        title="Delete Message"
+        message="Are you sure you want to delete this message? This action cannot be undone."
+        confirmText="Delete"
+        isDestructive={true}
+      />
     </div>
   );
 };
