@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { IMessage, IConversation } from '@/types/chat';
 import { useAuth } from '@/context/AuthContext';
 import { format } from 'date-fns';
-import { Send, ArrowLeft, Edit2, X, Check } from 'lucide-react';
+import { Send, ArrowLeft, Edit2, X, Check, Trash2 } from 'lucide-react';
 // import Image from 'next/image'; // Remove unused
 import UserAvatar from '@/components/UserAvatar';
 
@@ -11,6 +11,7 @@ interface ChatWindowProps {
   messages: IMessage[];
   onSendMessage: (content: string) => void;
   onEditMessage: (messageId: string, newContent: string) => Promise<void>;
+  onDeleteMessage: (messageId: string) => Promise<void>;
   loading: boolean;
   onBack: () => void;
 }
@@ -20,6 +21,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   messages,
   onSendMessage,
   onEditMessage,
+  onDeleteMessage,
   loading,
   onBack,
 }) => {
@@ -27,6 +29,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   const [newMessage, setNewMessage] = useState('');
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editContent, setEditContent] = useState('');
+  const [showOptionsMessageId, setShowOptionsMessageId] = useState<
+    string | null
+  >(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const otherParticipant = conversation.participants.find(
@@ -52,6 +57,14 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   const handleEditClick = (message: IMessage) => {
     setEditingMessageId(message._id);
     setEditContent(message.content);
+    setShowOptionsMessageId(null);
+  };
+
+  const handleDeleteClick = async (messageId: string) => {
+    if (confirm('Are you sure you want to delete this message?')) {
+      await onDeleteMessage(messageId);
+      setShowOptionsMessageId(null);
+    }
   };
 
   const handleCancelEdit = () => {
@@ -72,7 +85,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
   const handleTouchStart = (message: IMessage) => {
     if (message.sender === currentUser?._id) {
       longPressTimerRef.current = setTimeout(() => {
-        handleEditClick(message);
+        setShowOptionsMessageId(message._id);
       }, 500);
     }
   };
@@ -117,6 +130,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
           messages.map((message) => {
             const isOwn = message.sender === currentUser?._id;
             const isEditing = editingMessageId === message._id;
+            const showOptions = showOptionsMessageId === message._id;
 
             return (
               <div
@@ -170,13 +184,48 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                       </div>
                     </>
                   )}
-                  {isOwn && !isEditing && (
-                    <button
-                      onClick={() => handleEditClick(message)}
-                      className="absolute bottom-2 left-3 opacity-0 group-hover:opacity-100 transition-opacity text-white hover:text-indigo-100"
-                    >
-                      <Edit2 size={12} />
-                    </button>
+
+                  {/* Options Overlay for Mobile (Long Press) */}
+                  {showOptions && isOwn && (
+                    <div className="absolute inset-0 bg-black/60 rounded-2xl rounded-br-none flex items-center justify-center gap-3 animate-in fade-in zoom-in duration-200">
+                      <button
+                        onClick={() => handleEditClick(message)}
+                        className="p-2 bg-white rounded-full text-indigo-600"
+                      >
+                        <Edit2 size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(message._id)}
+                        className="p-2 bg-white rounded-full text-red-600"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                      <button
+                        onClick={() => setShowOptionsMessageId(null)}
+                        className="absolute top-1 right-1 text-white/80 p-1"
+                      >
+                        <X size={12} />
+                      </button>
+                    </div>
+                  )}
+
+                  {isOwn && !isEditing && !showOptions && (
+                    <div className="absolute bottom-2 left-[-60px] opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                      <button
+                        onClick={() => handleEditClick(message)}
+                        className="p-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-gray-600"
+                        title="Edit"
+                      >
+                        <Edit2 size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(message._id)}
+                        className="p-1.5 bg-gray-100 hover:bg-red-100 rounded-full text-red-500"
+                        title="Delete"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>

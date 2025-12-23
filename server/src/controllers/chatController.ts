@@ -131,3 +131,40 @@ export const editMessage = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const deleteMessage = async (req: AuthRequest, res: Response) => {
+  try {
+    const { messageId } = (req as any).params;
+    const userId = req.user._id;
+
+    const message = await Message.findById(messageId);
+
+    if (!message) {
+      res.status(404).json({ message: 'Message not found' });
+      return;
+    }
+
+    if (message.sender.toString() !== userId.toString()) {
+      res
+        .status(403)
+        .json({ message: 'Not authorized to delete this message' });
+      return;
+    }
+
+    await Message.deleteOne({ _id: messageId });
+
+    // Emit socket event
+    const io = getIO();
+    const conversation = await Conversation.findById(message.conversationId);
+    if (conversation) {
+      conversation.participants.forEach((participantId) => {
+        io.to(participantId.toString()).emit('message_deleted', messageId);
+      });
+    }
+
+    res.json({ message: 'Message deleted' });
+  } catch (error) {
+    console.error('Error deleting message:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};

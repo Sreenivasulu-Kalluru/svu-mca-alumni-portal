@@ -207,9 +207,38 @@ function ChatContent() {
       );
     });
 
+    socket.on('message_deleted', (messageId: string) => {
+      // Remove from current messages
+      setCurrentMessages((prev) => prev.filter((msg) => msg._id !== messageId));
+
+      // Update conversations if last message was deleted
+      // For simplicity/accuracy, since we don't know the new last message without fetching,
+      // we might want to re-fetch conversations or just leave it.
+      // If we want to be accurate, we should probably fetch the new last message or the conversation again.
+      // But let's at least check if the deleted message was the last one previewed
+      setConversations((prev) => {
+        return prev.map((conv) => {
+          if (
+            conv.lastMessage &&
+            (conv.lastMessage as IMessage)._id === messageId
+          ) {
+            return {
+              ...conv,
+              lastMessage: {
+                ...conv.lastMessage,
+                content: 'Message deleted',
+              } as IMessage,
+            };
+          }
+          return conv;
+        });
+      });
+    });
+
     return () => {
       socket.off('receive_message');
       socket.off('message_updated');
+      socket.off('message_deleted');
     };
   }, [socket, selectedConversationId]);
 
@@ -324,6 +353,32 @@ function ChatContent() {
     }
   };
 
+  const handleDeleteMessage = async (messageId: string) => {
+    if (!user) return;
+    try {
+      const token = user.token || localStorage.getItem('token');
+      const res = await fetch(
+        `${
+          process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'
+        }/api/chat/${messageId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (res.ok) {
+        setCurrentMessages((prev) =>
+          prev.filter((msg) => msg._id !== messageId)
+        );
+      }
+    } catch (error) {
+      console.error('Error deleting message:', error);
+    }
+  };
+
   const handleBack = () => {
     setSelectedConversationId(null);
     router.replace('/chat');
@@ -371,6 +426,7 @@ function ChatContent() {
               messages={currentMessages}
               onSendMessage={handleSendMessage}
               onEditMessage={handleEditMessage}
+              onDeleteMessage={handleDeleteMessage}
               loading={loadingMessages}
               onBack={handleBack}
             />

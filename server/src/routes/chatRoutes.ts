@@ -5,6 +5,7 @@ import {
   getConversations,
   getMessages,
   editMessage,
+  deleteMessage,
 } from '../controllers/chatController.js';
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.get('/', protect, getConversations);
 // Specific conversation messages
 router.get('/:conversationId', protect, getMessages);
 router.put('/:messageId', protect, editMessage);
+router.delete('/:messageId', protect, deleteMessage);
 
 export default router;
