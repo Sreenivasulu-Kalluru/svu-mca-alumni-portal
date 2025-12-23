@@ -67,6 +67,23 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
     }
   };
 
+  const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleTouchStart = (message: IMessage) => {
+    if (message.sender === currentUser?._id) {
+      longPressTimerRef.current = setTimeout(() => {
+        handleEditClick(message);
+      }, 500);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (longPressTimerRef.current) {
+      clearTimeout(longPressTimerRef.current);
+      longPressTimerRef.current = null;
+    }
+  };
+
   if (!otherParticipant) return <div>Conversation error</div>;
 
   return (
@@ -109,6 +126,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({
                 } group`}
               >
                 <div
+                  onTouchStart={() => handleTouchStart(message)}
+                  onTouchEnd={handleTouchEnd}
+                  onTouchMove={handleTouchEnd}
                   className={`max-w-[70%] px-4 py-2 rounded-2xl text-sm relative ${
                     isOwn
                       ? 'bg-indigo-600 text-white rounded-br-none'
