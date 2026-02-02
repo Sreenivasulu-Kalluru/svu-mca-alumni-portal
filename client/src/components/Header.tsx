@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { getImageUrl } from '@/utils/imageHelper';
 import {
-  GraduationCap,
   User,
   LogOut,
   ChevronDown,
@@ -44,7 +43,15 @@ const Header = () => {
           href="/"
           className="flex items-center gap-2 font-bold text-xl text-blue-900"
         >
-          <GraduationCap className="h-8 w-8 text-amber-600" />
+          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-white shadow-sm border border-gray-100 flex-none ring-2 ring-white/50">
+            <Image
+              src="/svu logo.jpeg"
+              alt="SVU Logo"
+              fill
+              className="object-contain p-1"
+              priority
+            />
+          </div>
           <span className="hidden md:block">SVU MCA Alumni</span>
           <span className="items-center md:hidden">SVU MCA</span>
         </Link>

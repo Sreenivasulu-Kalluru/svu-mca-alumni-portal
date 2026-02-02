@@ -1,8 +1,9 @@
 'use client';
 
 import Header from '@/components/Header';
-import { Users, Briefcase, Calendar, Rocket } from 'lucide-react';
+import { Users, Briefcase, Calendar } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import AnimatedCounter from '@/components/AnimatedCounter';
 
@@ -211,7 +212,14 @@ export default function Home() {
       <footer className="bg-gray-50 text-gray-600 py-12 border-t border-gray-200">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Rocket className="h-6 w-6 text-amber-600" />
+            <div className="relative w-10 h-10 rounded-full overflow-hidden bg-white shadow-sm border border-gray-100 flex-none ring-2 ring-white/50">
+              <Image
+                src="/svu logo.jpeg"
+                alt="SVU Logo"
+                fill
+                className="object-contain p-1"
+              />
+            </div>
             <span className="text-xl font-bold text-gray-900">
               SVU MCA Department
             </span>
