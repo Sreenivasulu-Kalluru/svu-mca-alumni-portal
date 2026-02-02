@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     creator: '@svu_mca',
   },
   icons: {
-    icon: '/icon.png', // Next.js will resolve this from app/icon.png
+    icon: '/svu logo.jpeg',
   },
 };
 
